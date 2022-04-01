@@ -1,0 +1,17 @@
+<h2>Lista de productos</h2>
+<table>
+
+    {{#each productos}}
+    <tr>
+        <td>producto:{{this.nombre}}</td>
+        <td>precio:${{this.precio}}</td> 
+        <td>url:{{this.foto}}</td> 
+        <td>stock:{{this.stock}}</td> 
+        <td>fecha:{{this.timestamp}}</td>
+        <td>desc:{{this.descripcion}}</td>
+    </tr>
+    {{/each}}
+
+
+</table>
+{{!-- <a href="/api/productos">Cargar productos</a> --}}
