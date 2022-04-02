@@ -1,0 +1,26 @@
+h1, h2 ,h3 {
+    color: red;
+}
+
+body{
+    background-color: red;
+}
+h2{
+    color: blue;
+}
+ul > li > :nth-child(1){
+   color: blue;
+} 
+ul > li > :nth-child(2){
+    color:brown
+} 
+ul > li > :nth-child(3){
+    color: green;
+} 
+tbody {
+    background-color:rgba(16, 16, 39, 0.644);
+    color: rgb(218, 206, 206)
+}
+tbody > tr > td{
+    padding: 1em;
+}
