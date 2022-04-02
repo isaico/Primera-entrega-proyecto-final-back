@@ -1,15 +1,15 @@
 <h2>Lista de productos</h2>
 <form action="/api/productos" method="POST">
     <label for="producto">Nombre:</label>
-    <input type="text" name="producto" placeholder="producto">
+    <input type="text" name="nombre" placeholder="producto">
     <label for="precio">Precio:</label>
-    <input type="number" min="1" name="precio" placeholder="$111">
+    <input type="number"  name="precio" placeholder="$111">
     <label for="stock">stock:</label>
     <input type="number" min="1" max="100" name="stock" placeholder="10">
     <label for="descripcion">descripcion:</label>
     <input type="text" name="descripcion" placeholder="esta es una descripcion para el producto...">
-    <label for="thumbnail">Url:</label>
-    <input type="text" name="thumbnail" placeholder="https://someurl.com">
+    <label for="foto">Url:</label>
+    <input type="text" name="foto" placeholder="https://someurl.com">
     <button type="submit">Enviar</button>
 </form>
-{{!-- <a href="/api/productos">Ver los productos</a> --}}
+<a href="/api/productos">Ver los productos</a>

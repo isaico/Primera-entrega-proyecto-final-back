@@ -1,0 +1,1 @@
+[{"nombre":"goma","precio":123,"foto":"www.someurl.com","id":1,"codigo":"","stock":50,"timestamp":"Sat Apr 02 2022 16:48:33 GMT-0300 (hora estándar de Argentina)","descripcion":"un exelente producto"}]

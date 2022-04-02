@@ -1,9 +1,20 @@
-<h2>Lista de productos del cart</h2>
-<ul>
+<h2>Lista de productos del carrito</h2>
+<table>
 
-    {{#each cartProds}}
-    <li>{{this.producto}} ${{this.precio}} {{this.thumbnail}}</li>
-    {{/each}}
+  {{#each cartProds}}
+    <tr>
+      <td>producto:{{this.nombre}}</td>
+      <td>precio:${{this.precio}}</td>
+      <td>url:{{this.foto}}</td>
+      <td>stock:{{this.stock}}</td>
+      <td>fecha:{{this.timestamp}}</td>
+      <td>desc:{{this.descripcion}}</td>
+      <td>
+        <form action='/api/carrito/{{cart.id}}/productos{{this.id}}' method='DELETE'>
+          <button type='submit'>borrar producto</button>
+        </form>
+      </td>
+    </tr>
+  {{/each}}
 
-
-</ul>
+</table>

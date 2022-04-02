@@ -1,17 +1,54 @@
 <h2>Lista de productos</h2>
 <table>
 
-    {{#each productos}}
+  {{#each productos}}
+
     <tr>
-        <td>producto:{{this.nombre}}</td>
-        <td>precio:${{this.precio}}</td> 
-        <td>url:{{this.foto}}</td> 
-        <td>stock:{{this.stock}}</td> 
-        <td>fecha:{{this.timestamp}}</td>
-        <td>desc:{{this.descripcion}}</td>
-    </tr>
+      <td>producto:{{this.nombre}}</td>
+      <td>precio:${{this.precio}}</td>
+      <td>url:{{this.foto}}</td>
+      <td>stock:{{this.stock}}</td>
+      <td>fecha:{{this.timestamp}}</td>
+      <td>desc:{{this.descripcion}}</td>
+      <td>
+        {{!-- <form action="/api/carrito/{{cart.id}}/productos" method="POST">
+        <button type="submit">agregar al carrito</button>
+        </form> --}}
+        <form action="/api/carrito/{{cart.id}}/productos" method="POST">
+<button type="submit">cargar producto</button>
+</form>
+      </td>
+      
+    {{!-- NO ME TOMA EL IF DENTRO DEL EACH Y NOSE PORQE --}}
+
+    {{!-- {{#if admin }}
+    <form action="/api/productos/{{this.id}}"  method="PUT">
+    <button type="submit">actualizar</button>
+    </form>
+    <form action="/api/productos/{{this.id}}" method="DELETE">
+    <button type="submit">borrar</button>
+    </form>
+    {{/if}} --}}
+    
     {{/each}}
 
-
+    {{#if admin }}
+    <form action="/api/productos/{{this.id}}"  method="PUT">
+    <button type="submit">actualizar</button>
+    </form>
+    <form action="/api/productos/{{this.id}}" method="DELETE">
+    <button type="submit">borrar</button>
+    </form>
+    {{/if}}
+    
+    </tr>
 </table>
-{{!-- <a href="/api/productos">Cargar productos</a> --}}
+{{#if admin}}
+<form action="/api/productos" method="POST">
+<button type="submit">CARGAR PRODUCTOS</button>
+</form>
+{{!-- <a href='/api/productos'>Cargar productos</a> --}}
+{{/if}}
+ <form action="/api/carrito"  method="POST">
+    <button type="submit">crear carrito</button>
+</form>

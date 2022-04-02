@@ -3,6 +3,7 @@ const express = require('express');
 const { engine } = require('express-handlebars');
 const path = require('path');
 const { v4: uuidv4 } = require('uuid');
+const fs = require('fs');
 
 const app = express();
 const PORT = process.env.PORT ?? 8080;
@@ -15,6 +16,7 @@ app.set('view engine', 'hbs');
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
+
 /* -------------------------------------------------------------------------- */
 /*                                   ROUTES                                   */
 /* -------------------------------------------------------------------------- */
@@ -26,7 +28,9 @@ app.use('/api/productos', routeProductos);
 /*                                    DATA                                    */
 /* -------------------------------------------------------------------------- */
 const dateServer = Date(Date.now()).toString();
-const productos = [
+const DATA_PATH = 'src/data/productos.txt';
+
+const fsProductos = [
   {
     nombre: 'goma',
     precio: 123,
@@ -38,6 +42,16 @@ const productos = [
     descripcion: 'un exelente producto',
   },
 ];
+
+fs.writeFileSync(DATA_PATH, JSON.stringify(fsProductos));
+
+const prods = fs.readFileSync(DATA_PATH, 'utf-8');
+const productos = JSON.parse(prods);
+
+const cargarArchivo = (data) => {
+  fs.writeFileSync(DATA_PATH, JSON.stringify(data));
+};
+
 const carrito = [];
 const admin = true;
 /* -------------------------------------------------------------------------- */
@@ -72,12 +86,18 @@ routeProductos.get('/:id?', (req, res) => {
   if (id && id !== undefined) {
     let founded = findById(productos, id);
     if (founded) {
-      res.json( founded );
+      res.json(founded);
     } else {
-      res.render('error', { layout: 'index' });
+      let cart = carrito[0]
+      res.render('error', { layout: 'index',cart});
     }
   } else {
-    res.render('productos-main', { layout: 'index', productos, style:'style.css'});
+    
+    res.render('productos-main', {
+      layout: 'index',
+      admin,
+      productos,
+    });
   }
 });
 
@@ -96,7 +116,8 @@ routeProductos.post('/', (req, res) => {
     body.timestamp = date;
     console.log(body);
     productos.push(body);
-    res.render('main', { layout: 'index' });
+    cargarArchivo(productos);
+    res.render('main', { layout: 'index', admin });
   } else {
     res.render('error', { layout: 'index', err: ERR_ADMIN });
   }
@@ -143,6 +164,7 @@ routeProductos.delete('/:id', (req, res) => {
     const { id } = req.params;
     let found = findById(productos, id);
     deleteProd(productos, found);
+    cargarArchivo(productos);
     res.status(200).send('se elimino el producto');
   } else {
     res.render('error', { layout: 'index', err: ERR_ADMIN });
@@ -162,7 +184,9 @@ routeCarrito.post('/', (req, res) => {
 
   if (admin) {
     carrito.push({ id: 2, productos: [] });
-    res.status(200).json(carrito);
+    
+    let cart=carrito[0]
+    res.render('carrito',{layout:'index', cart})
   } else {
     res.render('error', { layout: 'index', err: ERR_ADMIN });
   }
@@ -177,11 +201,13 @@ routeCarrito.post('/:id/productos', (req, res) => {
 
   if (admin) {
     const { id } = req.params;
-    const idProd = 1;
+    const idProd = 1; //este id luego sera dinamico para obtener cualquier id de producto
     if (id) {
       let newObj = findById(productos, idProd);
       carrito[0].productos.push(newObj);
       res.status(200).json(carrito);
+      // res.render('productos-cart', { layout: 'index' });
+      
     }
   } else {
     res.render('error', { layout: 'index', err: ERR_ADMIN });
@@ -220,6 +246,7 @@ routeCarrito.delete('/:id/productos/:id_prod', (req, res) => {
     if (id) {
       let cartProducts = [...carrito[0].productos];
       let deletedProduct = deleteProd(cartProducts, id_prod);
+      
       res
         .status(200)
         .json({ mensaje: 'producto del carrito eliminado', deletedProduct });
@@ -241,7 +268,7 @@ routeCarrito.get('/:id/productos', (req, res) => {
 
   if (admin) {
     let cartProds = [...carrito[0].productos];
-    console.log(cartProds);
+   
     res.render('productos-cart', { layout: 'index', cartProds });
   } else {
     res.render('error', { layout: 'index', err: ERR_ADMIN });
@@ -252,7 +279,11 @@ routeCarrito.get('/:id/productos', (req, res) => {
 /*                               ERRORES DE RUTA                              */
 /* -------------------------------------------------------------------------- */
 app.get('*', (req, res) => {
-  const ERR_ROUTE = { error: '-2', ruta: `${req.path}`, metodo: `${req.method} ` };
+  const ERR_ROUTE = {
+    error: '-2',
+    ruta: `${req.path}`,
+    metodo: `${req.method} `,
+  };
   res.render('error', { layout: 'index', err: ERR_ROUTE });
 });
 //por el momento el manejo los errores tipo objeto lo solucione creando variables, luego lo mutare a clases

@@ -1,0 +1,10 @@
+<h2>carrito creado: id-{{cart.id}}</h2>
+<form action="/api/carrito/{{cart.id}}/productos" method="POST">
+<button type="submit">cargar</button>
+</form>
+<form action="/api/carrito/{{cart.id}}" method="DELETE">
+<button type="submit">borrar carrito</button>
+</form>
+<form action="/api/carrito/{{cart.id}}/productos" method="GET">
+<button type="submit">ver</button>
+</form>
